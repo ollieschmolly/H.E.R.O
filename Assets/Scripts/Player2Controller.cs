@@ -62,7 +62,12 @@ public class Player2Controller : MonoBehaviour {
 		}
 
 		if (Input.GetAxis ("Horizontal_P2") < 0) {
-			velocity.x = -walkSpeed;
+			if (slide) {
+				velocity.x += -walkSpeed * velocity.x;
+			}
+			else {
+				velocity.x = -walkSpeed;
+			}
 			if (_controller.isGrounded != true) {
 				_animator.setAnimation ("Jump");
 			}
@@ -74,7 +79,12 @@ public class Player2Controller : MonoBehaviour {
 		} 
 
 		else if (Input.GetAxis ("Horizontal_P2") > 0) {
-			velocity.x = walkSpeed;
+			if (slide) {
+				velocity.x += walkSpeed * velocity.x;
+			} 
+			else {
+				velocity.x = walkSpeed;
+			}
 			if (_controller.isGrounded != true) {
 				_animator.setAnimation ("Jump");
 			}
@@ -92,7 +102,7 @@ public class Player2Controller : MonoBehaviour {
 		else {
 			_animator.setAnimation ("Idle");
 			if (slide) {
-				velocity.x *= 1.5f;
+				velocity.x += velocity.x * 0.05f;
 			} 
 			else {
 				velocity.x = 0;
@@ -172,6 +182,12 @@ public class Player2Controller : MonoBehaviour {
 	void OnTriggerStay2D(Collider2D col) {
 		if (col.tag == "Bounce") {
 			Bounce = true;
+		}
+		if (col.tag == "IceBlock") {
+			slide = true;
+		} 
+		else {
+			slide = false;
 		}
 
 	}
