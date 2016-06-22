@@ -5,11 +5,11 @@ public class WallScript : MonoBehaviour {
 
 	void OnTriggerEnter2D (Collider2D collider) {
 		PlayerWeaponScript shot = collider.gameObject.GetComponent<PlayerWeaponScript> ();
-		ShurikenScript enemyShot = collider.gameObject.GetComponent<ShurikenScript> ();
-		if (shot != null) {			
+		Player2WeaponScript enemyShot = collider.gameObject.GetComponent<Player2WeaponScript> ();
+		if (shot != null && shot.fire) {			
 			Destroy (shot.gameObject);
 		}
-		if (enemyShot != null) {
+		if (enemyShot != null && enemyShot.fire) {
 			Destroy (enemyShot.gameObject);
 		}
 	}
