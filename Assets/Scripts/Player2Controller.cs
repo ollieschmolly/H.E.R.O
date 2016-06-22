@@ -92,7 +92,7 @@ public class Player2Controller : MonoBehaviour {
 		else {
 			_animator.setAnimation ("Idle");
 			if (slide) {
-				velocity.x += 10;
+				velocity.x *= 1.5f;
 			} 
 			else {
 				velocity.x = 0;
@@ -167,5 +167,12 @@ public class Player2Controller : MonoBehaviour {
 		else {
 			slide = false;
 		}
+	}
+
+	void OnTriggerStay2D(Collider2D col) {
+		if (col.tag == "Bounce") {
+			Bounce = true;
+		}
+
 	}
 }
