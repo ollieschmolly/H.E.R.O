@@ -12,6 +12,7 @@ public class PlayerWeaponScript : MonoBehaviour {
 	// ShotScript code
 	public PlayerController caster;
 	private bool atCaster = false;
+	public string shotType = "default";
 
 	public int damage = 1;
 
