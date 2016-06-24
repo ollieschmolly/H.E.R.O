@@ -7,10 +7,10 @@ public class WallScript : MonoBehaviour {
 		PlayerWeaponScript shot = collider.gameObject.GetComponent<PlayerWeaponScript> ();
 		Player2WeaponScript enemyShot = collider.gameObject.GetComponent<Player2WeaponScript> ();
 		if (shot != null && shot.fire) {			
-			Destroy (shot.gameObject);
+			shot.Destroy ();
 		}
 		if (enemyShot != null && enemyShot.fire) {
-			Destroy (enemyShot.gameObject);
+			shot.Destroy ();
 		}
 	}
 }
