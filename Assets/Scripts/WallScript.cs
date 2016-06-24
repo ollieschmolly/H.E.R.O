@@ -10,7 +10,7 @@ public class WallScript : MonoBehaviour {
 			shot.Destroy ();
 		}
 		if (enemyShot != null && enemyShot.fire) {
-			shot.Destroy ();
+			enemyShot.Destroy ();
 		}
 	}
 }

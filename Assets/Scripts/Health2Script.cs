@@ -17,12 +17,12 @@ public class Health2Script : MonoBehaviour {
 			hp -= shot.damage;
 			System.Threading.Thread d = new System.Threading.Thread (() => shot.Destroy ());
 			d.Start ();
+            //Destroy(shot.gameObject);
 			if (hp <= 0) {
 				if (player.weapon != null) {
 					Destroy (player.weapon);
 				}
 				Destroy (gameObject);
-
 			}			
 		}
 	}

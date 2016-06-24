@@ -15,7 +15,7 @@ public class FountainScript : MonoBehaviour {
 	void OnTriggerEnter2D (Collider2D collider) {
 		PlayerController player = collider.gameObject.GetComponent<PlayerController> ();
 		if (player != null) {
-			player.fountains.Add(this);
+			player.fountain = this;
 			player.inFountain = true;
 			Players.Add (player);
 		}
@@ -24,8 +24,11 @@ public class FountainScript : MonoBehaviour {
 	void OnTriggerExit2D (Collider2D collider) {
 		PlayerController player = collider.gameObject.GetComponent<PlayerController> ();
 		if (player != null) {
-			player.fountains.Remove (this);
-			player.inFountain = false;
+            if (player.fountain.Equals(this))
+            {
+                player.fountain = null;
+                player.inFountain = false;
+            }
 			Players.Remove (player);
 		}
 	}

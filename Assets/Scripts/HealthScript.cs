@@ -5,8 +5,6 @@ public class HealthScript : MonoBehaviour {
 
 	public int hp = 5;
 	private PlayerController player; 
-	private AudioSource audio;
-	public AudioClip DeathScreamWhenYouDie;
 
 	void Awake () {
 		player = gameObject.GetComponent<PlayerController> ();
@@ -17,7 +15,9 @@ public class HealthScript : MonoBehaviour {
 		Player2WeaponScript shot = collider.gameObject.GetComponent<Player2WeaponScript> ();
 		if (shot != null) {			
 			hp -= shot.damage;
-			Destroy (shot.gameObject);
+            System.Threading.Thread d = new System.Threading.Thread(() => shot.Destroy());
+            d.Start();
+			//Destroy (shot.gameObject);
 			if (hp <= 0) {
 				if (player.weapon != null) {
 					Destroy (player.weapon);
