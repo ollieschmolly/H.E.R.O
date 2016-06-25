@@ -9,6 +9,7 @@ public class Player2Controller : MonoBehaviour
     public float gravity = -35;
     public float jumpHeight = 2;
     public float maxHeight = 20;
+	public float RunArrowStrength = 75;
 
     private CharacterController2D _controller;
     private AnimationController2D _animator;
@@ -28,6 +29,11 @@ public class Player2Controller : MonoBehaviour
     private bool doubleJump = false;            // Allows the player to double jump
     private bool doubleJumped = false;          // Records if the player has double jumped
     private bool slide = false;
+	private bool RunRight = false;
+	private bool RunLeft = false;
+	private bool RunArrows = false;
+	private bool AirControl = true;
+
 
     // Use this for initialization
     void Start()
@@ -78,10 +84,18 @@ public class Player2Controller : MonoBehaviour
         if (Input.GetAxis("Horizontal_P2") < 0 || Input.GetAxis("LeftJoystickX_P2") < 0)
         {
 
-            if (slide)
-            {
-                velocity.x += -walkSpeed * velocity.x;
-            }
+			if (slide) {
+				if (velocity.x > 0) {
+					velocity.x += -walkSpeed * 0.002f;
+				} 
+				else {
+					velocity.x += -walkSpeed * 0.11f;
+				}
+			}
+			else if (RunLeft | RunRight) {
+				RunArrows = true;
+
+			} 
             else
             {
                 velocity.x = -walkSpeed;
@@ -100,10 +114,18 @@ public class Player2Controller : MonoBehaviour
 
         else if (Input.GetAxis("Horizontal_P2") > 0 || Input.GetAxis("LeftJoystickX_P2") > 0)
         {
-            if (slide)
-            {
-                velocity.x += walkSpeed * velocity.x;
+            if (slide) {
+				if (velocity.x < 0) {
+					velocity.x += walkSpeed * 0.002f;
+				} 
+				else {
+					velocity.x += walkSpeed * 0.11f;
+				}
             }
+			else if (RunLeft | RunRight) {
+				RunArrows = true;
+
+			}
             else
             {
                 velocity.x = walkSpeed;
@@ -128,15 +150,32 @@ public class Player2Controller : MonoBehaviour
         else
         {
             _animator.setAnimation("Idle");
-            if (slide)
-            {
-                velocity.x += velocity.x * 0.05f;
+            if (slide) {
+				velocity.x += velocity.x * 0.1f;
             }
-            else
+			else if (RunArrows) {
+				velocity.x += velocity.x * 3;
+			}
+			else if (_controller.isGrounded)
             {
                 velocity.x = 0;
             }
         }
+		if (RunLeft | RunRight) {
+			RunArrows = true;
+		}
+
+		if (RunArrows) {
+			if (RunRight) {
+				velocity.x += RunArrowStrength;
+				velocity.y += 3;
+			} 
+			else if (RunLeft) {
+				velocity.x -= RunArrowStrength;
+				velocity.y += 3;
+			}
+			AirControl = false;
+		}
 
         if ((Input.GetAxis("Vertical_P2") < 0 || Input.GetAxis("LeftJoystickY_P2") > 0) && !_controller.isGrounded)
         {
@@ -201,6 +240,11 @@ public class Player2Controller : MonoBehaviour
         }
 
         _controller.move(velocity * Time.deltaTime);
+		RunArrows = false;
+
+		if (_controller.isGrounded) {
+			AirControl = true;
+		}
     }
 
     void Flip()
@@ -233,10 +277,12 @@ public class Player2Controller : MonoBehaviour
         {
             slide = true;
         }
-        else
-        {
-            slide = false;
-        }
+		else if (collider.tag == "RunRight") {
+			RunRight = true;
+		}
+		else if (collider.tag == "RunLeft") {
+			RunLeft = true;
+		}
     }
 
     void OnTriggerStay2D(Collider2D col)
@@ -250,9 +296,25 @@ public class Player2Controller : MonoBehaviour
         {
             slide = true;
         }
-        else
-        {
-            slide = false;
-        }
+		if (col.tag == "RunRight") {
+			RunRight = true;
+		} 
+		if (col.tag == "RunLeft") {
+			RunLeft = true;
+		} 
     }
+	void OnTriggerExit2D(Collider2D col) {
+		if (slide) {
+			slide = false;
+		}
+		if (RunLeft) {
+			RunLeft = false;
+		}
+		if (RunRight) {
+			RunRight = false;
+		}
+		if (RunArrows) {
+			RunArrows = false;
+		}
+	}
 }
