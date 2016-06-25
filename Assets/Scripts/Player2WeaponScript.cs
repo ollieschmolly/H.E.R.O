@@ -131,8 +131,4 @@ public class Player2WeaponScript : MonoBehaviour
         speed = new Vector2(2, 2);
         connected = true;
     }
-
-	public void Burn () {
-
-	}
 }
